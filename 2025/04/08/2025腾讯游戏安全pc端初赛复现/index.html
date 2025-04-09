@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2025腾讯游戏安全初赛复现 | qwq</title><meta name="author" content="我不配"><meta name="copyright" content="我不配"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前置准备因为驱动没有数字签名直接运行不行，我是把强制驱动签名关掉了  静态分析ACEFirstRound.exe驱动加载   a1+8()函数里面为  通过这个加载驱动    最终通过这个FilterSendMessage向驱动发送数据，驱动进行验证 r3层动调直接调试时，有两个地方要注意，一个是r3层的反调试，一个是驱动对进程的权限提升，导致调试器调试不了 r3层反调试在这里   创建了个线程进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025腾讯游戏安全初赛复现">
+<meta property="og:url" content="http://example.com/2025/04/08/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/index.html">
+<meta property="og:site_name" content="qwq">
+<meta property="og:description" content="前置准备因为驱动没有数字签名直接运行不行，我是把强制驱动签名关掉了  静态分析ACEFirstRound.exe驱动加载   a1+8()函数里面为  通过这个加载驱动    最终通过这个FilterSendMessage向驱动发送数据，驱动进行验证 r3层动调直接调试时，有两个地方要注意，一个是r3层的反调试，一个是驱动对进程的权限提升，导致调试器调试不了 r3层反调试在这里   创建了个线程进">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/jay.jpg">
+<meta property="article:published_time" content="2025-04-08T07:24:56.592Z">
+<meta property="article:modified_time" content="2025-04-09T08:04:43.934Z">
+<meta property="article:author" content="我不配">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/jay.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2025腾讯游戏安全初赛复现",
+  "url": "http://example.com/2025/04/08/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/",
+  "image": "http://example.com/img/jay.jpg",
+  "datePublished": "2025-04-08T07:24:56.592Z",
+  "dateModified": "2025-04-09T08:04:43.934Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我不配",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/04/08/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2025腾讯游戏安全初赛复现',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="qwq" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/jay.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">qwq</span></a><a class="nav-page-title" href="/"><span class="site-name">2025腾讯游戏安全初赛复现</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2025腾讯游戏安全初赛复现</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-08T07:24:56.592Z" title="发表于 2025-04-08 15:24:56">2025-04-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-09T08:04:43.934Z" title="更新于 2025-04-09 16:04:43">2025-04-09</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><p>因为驱动没有数字签名直接运行不行，我是把强制驱动签名关掉了</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409160103776.png" alt="image-20250409160103776"></p>
+<h2 id="静态分析ACEFirstRound-exe"><a href="#静态分析ACEFirstRound-exe" class="headerlink" title="静态分析ACEFirstRound.exe"></a>静态分析ACEFirstRound.exe</h2><p>驱动加载</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408154658501.png" alt="image-20250408154658501"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408154719203.png" alt="image-20250408154719203"></p>
+<p>a1+8()函数里面为</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408154819310.png" alt="image-20250408154819310"></p>
+<p>通过这个加载驱动</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408155228281.png" alt="image-20250408155228281"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408155259850.png" alt="image-20250408155259850"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408155435424.png" alt="image-20250408155435424"></p>
+<p>最终通过这个FilterSendMessage向驱动发送数据，驱动进行验证</p>
+<h2 id="r3层动调"><a href="#r3层动调" class="headerlink" title="r3层动调"></a>r3层动调</h2><p>直接调试时，有两个地方要注意，一个是r3层的反调试，一个是驱动对进程的权限提升，导致调试器调试不了</p>
+<p>r3层反调试在这里</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408211038565.png" alt="image-20250408211038565"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408211930623.png" alt="image-20250408211930623"></p>
+<p>创建了个线程进行反调试</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408211831848.png" alt="image-20250408211831848"></p>
+<p>把这个nop掉就能过了</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408212054167.png" alt="image-20250408212054167"></p>
+<p>然后是驱动对进程的进程的权限提升</p>
+<p>ida附加不上</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408210715667.png" alt="image-20250408210715667"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408212250006.png" alt="image-20250408212250006"></p>
+<p>听别的师傅说xdbg好用点有反反调试插件，直接能跑，<del>哎，我是废物，没有插件qwq</del></p>
+<p>其实这个问题也好解决，两个方法</p>
+<p>第一个就是nop掉加载驱动的函数，就只先分析r3层的</p>
+<p>第二就是找到内核提升权限的标志位，改成普通的就行</p>
+<p>说下第二个怎么弄</p>
+<p>进入windbg本机附加内核，程序起起来</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408212931389.png" alt="image-20250408212931389"></p>
+<p>重点在</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408213009153.png" alt="image-20250408213009153"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408213325240.png" alt="image-20250408213325240"></p>
+<p>具体结构类型在下面</p>
+<p><a target="_blank" rel="noopener" href="https://ntdoc.m417z.com/ps_protection">PS_PROTECTION - NtDoc</a></p>
+<p>在驱动里面是这样写的（在驱动的导入函数里找到PsGetCurrentThreadProcessId向上找到调用就找到了）</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408220852607.png" alt="image-20250408220852607"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408220907027.png" alt="image-20250408220907027"></p>
+<p>当前数值为0x62，type为0y010就是处于保护状态</p>
+<p>直接修改其值为0就行</p>
+<p>改完后就可以正常附加了</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408214827568.png" alt="image-20250408214827568"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408214851874.png" alt="image-20250408214851874"></p>
+<p>接下来就是愉快的调试分析了</p>
+<p>比较了长度范围和前几个字符为’ACE_’</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408214950320.png" alt="image-20250408214950320"></p>
+<p>base58</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408215201136.png" alt="image-20250408215201136"></p>
+<p>表</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408215225202.png" alt="image-20250408215225202"></p>
+<p>然后又加个@，在逆序</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408215609376.png" alt="image-20250408215609376"></p>
+<p>在异或sxx</p>
+<p>最后向驱动发送数据</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408220435736.png" alt="image-20250408220435736"></p>
+<h2 id="r0层静态"><a href="#r0层静态" class="headerlink" title="r0层静态"></a>r0层静态</h2><p>静态分析驱动有好多花</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408221214627.png" alt="image-20250408221214627"></p>
+<p>去除掉即可</p>
+<p>找到</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408224202943.png" alt="image-20250408224202943"></p>
+<p>这个下面会用到</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408221631716.png" alt="image-20250408221631716"></p>
+<p>这里就是驱动加密的地方</p>
+<p>但是直接解密就错了</p>
+<p>驱动对tea加密进行了inlinehook<img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408223012806.png" alt="image-20250408223012806"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408222926017.png" alt="image-20250408222926017"></p>
+<h2 id="r0层动态"><a href="#r0层动态" class="headerlink" title="r0层动态"></a>r0层动态</h2><p>windbg进行双机调试</p>
+<p>通过bu ACEDriver!DriverEntry设置预加载断点，在加载驱动时断下</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250408223513892.png" alt="image-20250408223513892"></p>
+<p>在上面我们发现传入驱动时</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409151959880.png" alt="image-20250409151959880"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409152053382.png" alt="image-20250409152053382"></p>
+<p>我们windbg断点下在这里</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409152509490.png" alt="image-20250409152509490"></p>
+<p>在往下跟跟</p>
+<p>看这两个参数</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409153551959.png" alt="image-20250409153551959"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409153712666.png" alt="image-20250409153712666"></p>
+<p>我们发现这个参数就是程序传入驱动的数据和大小</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409153512721.png" alt="image-20250409153512721"></p>
+<p>接着跟进</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409154203165.png" alt="image-20250409154203165"></p>
+<p>tea分成了四段</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409154306145.png" alt="image-20250409154306145"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409154341410.png" alt="image-20250409154341410"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409154414856.png" alt="image-20250409154414856"></p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409154513270.png" alt="image-20250409154513270"></p>
+<p>但是第三段其实就是第一段的后半部分，所以我们把这段内存dump出来</p>
+<p>用windbg这个命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.writemem C:\dump.bin fffff803`8c631000 L95</span><br></pre></td></tr></table></figure>
+
+<p>后面的参数是dump的位置 起始地址 大小</p>
+<p>合并下再放入ida里改下跳转</p>
+<p>得到真正的加密</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409155016050.png" alt="image-20250409155016050"></p>
+<p>密文再驱动里能直接看到</p>
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409155055576.png" alt="image-20250409155055576"></p>
+<p>解密脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">__int64  tea(unsigned int *a1, int *a2)</span><br><span class="line">&#123;</span><br><span class="line">    __int64 v2; // rbx</span><br><span class="line">    unsigned int v3; // esp</span><br><span class="line">    __int64 v4; // rbp</span><br><span class="line">    __int64 v5; // rdi</span><br><span class="line">    __int64 v6; // rsi</span><br><span class="line">    unsigned __int64 v7; // rax</span><br><span class="line">    int v9; // ebx</span><br><span class="line">    unsigned int v10; // r11d</span><br><span class="line">    int v11; // edi</span><br><span class="line">    unsigned int v12; // r9d</span><br><span class="line">    __int64 v13; // rdx</span><br><span class="line">    unsigned int v14; // r10d</span><br><span class="line">    __int64 result; // rax</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    v9 = *a2;</span><br><span class="line">    v10 = 0;</span><br><span class="line">    v11 = a2[1];</span><br><span class="line">    v12 = *a1;</span><br><span class="line">    v13 = 32;</span><br><span class="line">    v14 = a1[1];</span><br><span class="line"></span><br><span class="line">    do</span><br><span class="line">    &#123;</span><br><span class="line">        v10 -= 0x61C88647;</span><br><span class="line">        --v13;</span><br><span class="line">    &#125;while ( v13 );</span><br><span class="line">    v13 = 32;</span><br><span class="line"></span><br><span class="line">    do</span><br><span class="line">    &#123;</span><br><span class="line">//        v10 -= 0x61C88647;</span><br><span class="line">//        v12 += (v10 + v14) ^ (v9 + 16 * v14) ^ (v11 + (v14 &gt;&gt; 5));</span><br><span class="line">//        v14 += (v10 + a2[(v10 &gt;&gt; 11) &amp; 3]) ^ (v12 + ((16 * v12) ^ (v12 &gt;&gt; 5)));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        v14 -= (v10 + a2[(v10 &gt;&gt; 11) &amp; 3]) ^ (v12 + ((16 * v12) ^ (v12 &gt;&gt; 5)));</span><br><span class="line">        v12 -= (v10 + v14) ^ (v9 + 16 * v14) ^ (v11 + (v14 &gt;&gt; 5));</span><br><span class="line">        v10 += 0x61C88647;</span><br><span class="line"></span><br><span class="line">        --v13;</span><br><span class="line">    &#125;</span><br><span class="line">    while ( v13 );</span><br><span class="line">    *a1 = v12;</span><br><span class="line">    a1[1] = v14;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> unsigned int mi[]=&#123;0x0ec367b8,</span><br><span class="line">          0xc9da9044,</span><br><span class="line">          0xda6c2deb,</span><br><span class="line">          0x88ddc9c3,</span><br><span class="line">          0x32a01575,</span><br><span class="line">          0x231dd0b4,</span><br><span class="line">          0x4b9e8a74,</span><br><span class="line">          0xd75d3e74,</span><br><span class="line">          0xeaab8712,</span><br><span class="line">          0xe704e888,</span><br><span class="line">          0xe01a31ac,</span><br><span class="line">          0xecae205c,</span><br><span class="line">          0xa7be7467,</span><br><span class="line">          0x0c6252a3,</span><br><span class="line">          0x1aefec4e,</span><br><span class="line">          0xc40ded44,</span><br><span class="line">          0xc3c842cc,</span><br><span class="line">          0xde4a0c0e,</span><br><span class="line">          0x7c24f3fc,</span><br><span class="line">          0x8fb8d001,</span><br><span class="line">          0x11153e6e,</span><br><span class="line">          0x530ed15c,</span><br><span class="line">          0xf4214811,</span><br><span class="line">          0xbeb517e0,</span><br><span class="line">          0x63f91634,</span><br><span class="line">          0x4d96f8a5,</span><br><span class="line">          0xfe23eac8,</span><br><span class="line">          0x2c607adf,</span><br><span class="line">          0xcc43d85c,</span><br><span class="line">          0xff186c5b,</span><br><span class="line">          0x8763e1a5,</span><br><span class="line">          0x9187bd58,</span><br><span class="line">          0x87d1069b,</span><br><span class="line">          0xd7878d7b,</span><br><span class="line">          0x836e6b68,</span><br><span class="line">          0x55a0c63f,</span><br><span class="line">          0xd979fdb3,</span><br><span class="line">          0x3e524dee,</span><br><span class="line">          0x7ab35c82,</span><br><span class="line">          0xa2f4da8d,</span><br><span class="line">          0x1708ba4c,</span><br><span class="line">          0x710653e6,&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> int key[4]=&#123;0x41,0x43,0x45,0x36&#125;;</span><br><span class="line">for(int i=0;i&lt;42;i+=2) &#123;</span><br><span class="line">    tea(&amp;mi[i],&amp;key[0]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for(int i=0;i&lt;42;i++)&#123;</span><br><span class="line">    printf(&quot;%02x &quot;,mi[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src="/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/image-20250409155212811.png" alt="image-20250409155212811"></p>
+<p>所以flag为ACE_We1C0me!T0Z0Z5GamESecur1t9*CTf</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>哎，最简单的一年，可惜了，我太菜了qwq</p>
+<p>当时比赛时确实什么都不会，第一次做有关内核的，比赛只想着怎么动调了，静态也没怎么看，看别的师傅直接静态出了，tql，我数字签名搞了一天，哎qwq</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">我不配</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/04/08/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/">http://example.com/2025/04/08/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">qwq</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/jay.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/03/16/md5%E9%AD%94%E6%94%B9/" title="记录碰见过的一次md5魔改"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">记录碰见过的一次md5魔改</div></div><div class="info-2"><div class="info-item-1">md5魔改最近偶然看见一道魔改的md5题， 因为md5不可逆，所以也不怎么见，这个题大致就是找到魔改点，然后爆破md5（因为纯数字qwq） 主函数如下   MD5核心地方  看见0x28955B88等可知这是一个类md5加密算法 MD5Encode魔改点  很容易看出 后面的 ^0x12  ^0x34等 关键在MD5Update里面的魔改  这里面是自定义初始话的四个幻数（别问为什么就看见三个） 这些动调都可以轻松得到  1234context-&gt;state[0] = 0x10325476;context-&gt;state[1] = 0x12345678;context-&gt;state[2] = 0x12345678;context-&gt;state[3] = 0x67452301;  这个为魔改后的初始化幻数 去网上找个md5源码 MD5算法详解及实现（C语言）_c语言 md5-CSDN博客 MD5算法 —— C语言实现（字符串的加密） - mao的博客 -...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/jay.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">我不配</div><div class="author-info-description">不当废物</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">怎么了 你累了</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">前置准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90ACEFirstRound-exe"><span class="toc-number">2.</span> <span class="toc-text">静态分析ACEFirstRound.exe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#r3%E5%B1%82%E5%8A%A8%E8%B0%83"><span class="toc-number">3.</span> <span class="toc-text">r3层动调</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#r0%E5%B1%82%E9%9D%99%E6%80%81"><span class="toc-number">4.</span> <span class="toc-text">r0层静态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#r0%E5%B1%82%E5%8A%A8%E6%80%81"><span class="toc-number">5.</span> <span class="toc-text">r0层动态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">小结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/08/2025%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8pc%E7%AB%AF%E5%88%9D%E8%B5%9B%E5%A4%8D%E7%8E%B0/" title="2025腾讯游戏安全初赛复现">2025腾讯游戏安全初赛复现</a><time datetime="2025-04-08T07:24:56.592Z" title="发表于 2025-04-08 15:24:56">2025-04-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/16/md5%E9%AD%94%E6%94%B9/" title="记录碰见过的一次md5魔改">记录碰见过的一次md5魔改</a><time datetime="2025-03-16T08:58:47.914Z" title="发表于 2025-03-16 16:58:47">2025-03-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By 我不配</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
